@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Financeiro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="container">
+            <img src="imagens/logoInfinityPretov2.png" style="height: 10vh;">
+            <ul>
+                <li>Página Inicial</li>
+                <li>Sobre Nós</li>
+                <li>Simulador Financeiro</li>
+                <li>Fale conosco</li>
+            </ul>
+            <span class="userIcon"><img src="imagens/userIcon 1.png"></span>
+        </div>
+    </div>
+
+    <center>
+        <img class="infinityArt" src="imagens/INFINITY ART.png">
+    </center>
+
+
+    <div class="formulario">
+
+        <h1>Simulador Financeiro</h1>
+
+        <div class="input">
+
+            <center>
+                <fieldset>
+                    <legend>Valor da obra de arte</legend>
+                    <input type="number" id="input_valor_obra" placeholder="R$">
+                </fieldset>
+
+                <br>
+
+                <fieldset>
+                    <legend>Tamanho da obra de arte:</legend>
+                    <input type="text" id="input_tamanho_obra" placeholder="pequena, média, grande"><br>
+                    <span class="legenda">Grande (entre 80cm e 1m)<br>
+                        Média (entre 50cm e 80cm) <br>
+                        Pequena (até 50cm)</span><br>
+                </fieldset>
+
+                <br>
+
+                <fieldset>
+                    <legend>Você monitora a temperatura do ambiente onde estão suas obras?</legend>
+                    <input type="text" id="input_monitora_temperatura" placeholder="sim | não"><br>
+                    <br>
+                    Se sim, qual a temperatura que o ambiente está normalmente?<br>
+                    <input type="text" id="input_temperatura_ambiente" placeholder="C°">
+                </fieldset>
+
+                <br>
+
+                <fieldset>
+                    <legend>Você monitora a umidade do ambiente onde estão suas obras?</legend>
+                    <input type="text" id="input_monitora_umidade" placeholder="sim | não"><br>
+                    <br>
+                    Se sim, a qual a umidade que que o ambiente está normalmente?<br>
+                    <input type="text" id="input_umidade_ambiente" placeholder="00%">
+                </fieldset>
+
+                <br>
+
+                <fieldset>
+                    <legend>Você monitora a luminosidade do ambiente onde estão suas obras?</legend>
+                    <input type="text" id="input_monitora_luminosidade" placeholder="sim | não"><br>
+                    <br>
+                    Se sim, a qual a luminosidade que que o ambiente está normalmente?<br>
+                    <input type="text" id="input_luminosidade_ambiente" placeholder="lux">
+                </fieldset>
+            </center>
+            <br>
+
+            <button onclick="calcularDanoObra()">Ir para o resultado</button>
+            <br>
+            <br>
+            <div id="div_resultado"></div>
+
+        </div>
+
+
+</body>
+
+</html>
+
+<script>
+    function calcularDanoObra() {
+        // variáveis para receber tamanho e valor da obra
+        let tamanhoObra = input_tamanho_obra.value
+        let valorObra = input_valor_obra.value
+
+        // // variáveis para receber as informações se o cliente monitora ou não a temperatura, umidade e a luminosidade
+        let monitoraTemperatura = input_monitora_temperatura.value
+        let monitoraUmidade = input_monitora_umidade.value
+        let monitoraLuminosidade = input_monitora_luminosidade.value
+
+        // variáveis para receber as informações sobre a temperatura, umidade e luminosidade dos ambientes, caso o cliente as monitore
+        let temperaturaAmbiente = input_temperatura_ambiente.value
+        let umidadeAmbiente = input_umidade_ambiente.value
+        let luminosidadeAmbiente = input_luminosidade_ambiente.value
+
+        // cálculo para obras danificas que perdem no mínimo 1/4 do seu valor, ou seja, 25% 
+        let perdaValorObra = valorObra - (valorObra * 0.25)
+        let valorRestauracao = 0
+
+        // variáveis para servirem de auxiliares, para saber se, de acordo com o monitoramento ou falta dele, se o ambiente está nas condições adequadas para a conservação de obras de arte
+        let temperaturaAdequadaOuInadequada = ""
+        let umidadeAdequadaOuInadequada = ""
+        let luminosidadeAdequadaOuInadequada = ""
+
+        // // verificar se a temperatura é monitorada, e se sim, se está no ideal
+        if (monitoraTemperatura == "sim") {
+            if (temperaturaAmbiente >= 18 && temperaturaAmbiente <= 20) {
+                temperaturaAdequadaOuInadequada = "adequada"
+            } else {
+                temperaturaAdequadaOuInadequada = "inadequada"
+            }
+        } else if (monitoraTemperatura == "não") {
+            temperaturaAdequadaOuInadequada = "inadequada"
+        }
+
+        // // verificar se a umidade é monitorada, e se sim, se está no ideal
+        if (monitoraUmidade == "sim") {
+
+            if (umidadeAmbiente <= 65) {
+                umidadeAdequadaOuInadequada = "adequada"
+            } else {
+                umidadeAdequadaOuInadequada = "inadequada"
+            }
+        } else if (monitoraUmidade == "não") {
+            umidadeAdequadaOuInadequada = "inadequada"
+        }
+
+        // // verificar se a luminosidade é monitorada, e se sim, se está no ideal
+        if (monitoraLuminosidade == "sim") {
+
+            if (luminosidadeAmbiente >= 50 && luminosidadeAmbiente <= 150) {
+                luminosidadeAdequadaOuInadequada = "adequada"
+            } else {
+                luminosidadeAdequadaOuInadequada = "inadequada"
+            }
+        } else if (monitoraLuminosidade == "não") {
+            luminosidadeAdequadaOuInadequada = "inadequada"
+        }
+
+
+        // verificar gastos com uma obra severamente danificada
+        if (temperaturaAdequadaOuInadequada == "inadequada" && umidadeAdequadaOuInadequada == "inadequada"
+            && luminosidadeAdequadaOuInadequada == "inadequada") {
+
+            if (tamanhoObra == "pequena") {
+                valorRestauracao = 20000
+            } else if (tamanhoObra == "média") {
+                valorRestauracao = 30000
+            } else if (tamanhoObra == "grande") {
+                valorRestauracao = 40000
+            }
+
+            div_resultado.innerHTML = `Cuidado! A integridade das suas obras estão sendo severamente afetadas, <br>
+            fazendo que de R$${valorObra} passem a valer no máximo R$${perdaValorObra} e tragam um gasto de R$${valorRestauracao} para serem restauradas e correrem o risco de perderem sua originalidade.
+            <br>
+            A infinityArt vem justamente para prevenir esse tipo de cenário, para que você mantenha a integridade da sua obra e deixe de perder com possíveis restaurações, resguardando seu valor patrimônial e cultural.
+            `
+        }
+
+        // verificar gastos com uma obra mediamente danificada
+        if (temperaturaAdequadaOuInadequada == "inadequada" || umidadeAdequadaOuInadequada == "inadequada"
+            || luminosidadeAdequadaOuInadequada == "inadequada") {
+
+            if (tamanhoObra == "pequena") {
+                valorRestauracao = 11000
+            } else if (tamanhoObra == "média") {
+                valorRestauracao = 17000
+            } else if (tamanhoObra == "Grande" || tamanhoObra == "grande") {
+                valorRestauracao = 23000
+            }
+
+            div_resultado.innerHTML = `Cuidado! A integridade das suas obras podem estar sendo afetadas, <br>
+            fazendo que de R$${valorObra} passem a valer no máximo R$${perdaValorObra} <br>
+            e tragam um gasto de R$${valorRestauracao} para serem restauradas e correrem o risco de perderem sua originalidade.
+            <br><br>
+            A infinityArt vem justamente para prevenir esse tipo de cénario, para você mantenha a integridade da sua obra e deixe de perder com possíveis restaurações.`
+        }
+
+        if (temperaturaAdequadaOuInadequada == "adequada" && umidadeAdequadaOuInadequada == "adequada"
+            && luminosidadeAdequadaOuInadequada == "adequada") {
+
+            if (tamanhoObra == "pequena") {
+                valorRestauracao = 2000
+            } else if (tamanhoObra == "Média" || tamanhoObra == "média") {
+                valorRestauracao = 4000
+            } else if (tamanhoObra == "Grande" || tamanhoObra == "grande") {
+                valorRestauracao = 6000
+            }
+
+            div_resultado.innerHTML = `Você está monitorando bem! Mas porque ter só isso quando você tem a InfinityArt, <br>
+            que te ajuda no monitoramento das suas obras da forma correta? <br><br>
+            Impeça sua obra de valer R$${perdaValorObra}, fazendo com que você gaste R$${valorRestauracao} <br>
+            a cada 3 anos com restaurações que podem ser impedidas com a InfinityArt.`
+        }
+
+
+
+    }
+
+</script>
